@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+body {
+	border: 20px;
+}
+
+.btn {
+	border : 1px solid #BFAAA5;
+	margin: 10px;
+	
+}
+
+footer {
+    position: fixed;
+    height: 50px;
+    bottom: 0;
+    width: 100%;
+    background-color: #BFAAA5;
+}
+
+p.footertext {
+	color : white;
+	text-align: center;
+	padding-top: 10px;
+}
