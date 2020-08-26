@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Se connecter</title>
+<title>Accueil</title>
 
 	<!-- Bootstrap core CSS -->
 	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -20,15 +20,38 @@
     
 </head>
 <body class="container">
-
-	<div class="col-12">
-		<h1 class="my-5">Se connecter</h1>
-	</div>
 	
-	<form method="post" action ="${pageContext.request.contextPath}/connexion" class="row justify content mb-2">
-			<label for="user_id" class="col-2 col-form-label">Identifiant :</label>
-			<input class="form-control" type="text" id="user_id" name="user_id"/>
-			<input type="submit" class="btn" value="Connexion"/>
-	</form>
+	
+	<c:choose>
+		<c:when test="${empty sessionScope.utilisateur}">
+			<jsp:include page="/WEB-INF/Fragments/entete_deconnecte.jsp"></jsp:include>
+		
+		</c:when>
+		<c:otherwise>
+			<jsp:include page="/WEB-INF/Fragments/entete_connecte.jsp"></jsp:include>
+		
+		</c:otherwise>
+	</c:choose>
+
+	<c:choose>
+		<c:when test="${empty sessionScope.utilisateur}">
+			<div class="row">
+				<h1 class="my-5">Accueil</h1>
+			</div>
+		
+		</c:when>
+		<c:otherwise>
+			<div class="row">
+				<h1 class="my-5">${sessionScope.utilisateur.pseudo}, voici les enchères en cours</h1>
+			</div>
+			
+			<a href="${pageContext.request.contextPath}/voirProfil?pseudo=juju">juju</a>
+		</c:otherwise>
+	</c:choose>
+	
+	
+	
+	
+	
 </body>
 </html>

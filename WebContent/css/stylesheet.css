@@ -1,14 +1,38 @@
 @charset "UTF-8";
 
-body {
-	border: 20px;
-}
-
 .btn {
 	border : 1px solid #BFAAA5;
 	margin: 10px;
 	
 }
+span.text {
+	padding: 15px;
+}
+
+.row {
+	margin: 15px;
+}
+
+fieldset {
+	border : 1px solid #BFAAA5;
+	-moz-border-radius : 8px;
+	-webkit-border-radius : 8px;
+	border-radius : 8px;
+	padding : 15px;
+}
+
+legend {
+	width : auto;
+	color : #BFAAA5;
+	padding : 1%;
+	font-size: larger;
+}
+
+label {
+	text-align: right;
+	
+}
+
 
 footer {
     position: fixed;

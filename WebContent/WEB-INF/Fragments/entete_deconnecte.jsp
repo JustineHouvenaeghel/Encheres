@@ -1,0 +1,26 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<header>
+	<nav class="navbar navbar-expand-sm navbar-light fixed-top" role="navigation" style="background-color: #BFAAA5;">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/accueil"><img src="files/encheres.png" width="30" height="30" alt="encheres"> Les objets sont nos amis</a>
+			</div>
+		
+			<div class="navbar-collapse collapse justify-content-end">
+			    <div class="nav navbar-nav">
+			        
+			        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/seConnecter">Se connecter </a>
+			        
+			        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/creerUnCompte">Créer un compte </a>
+			        
+			    </div>
+			</div>
+		</div>
+    </nav>
+</header>
