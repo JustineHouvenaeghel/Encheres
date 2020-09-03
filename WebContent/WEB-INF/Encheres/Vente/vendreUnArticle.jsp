@@ -7,13 +7,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Accueil</title>
+<title>Nouvelle vente</title>
 
 	<!-- Bootstrap core CSS -->
-	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- 	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+<!-- 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+<!-- 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> -->
+<!--     <script src="bootstrap/js/bootstrap.min.js"></script> -->
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 	<!-- Custom styles for this template -->
     <link href="css/stylesheet.css" rel="stylesheet">
@@ -26,21 +32,12 @@
 
 
 	<div class="row">
-		<h1 class="my-5">Nouvelle vente</h1>
+		<h2 class="my-5 pt-5">Nouvelle vente</h2>
 	</div>
 	
-	<c:if test="${!empty listeCodesErreur}">
-	   	<div class="alert alert-danger" role="alert">
-	   		<strong>Erreur !</strong>
-	   		<ul>
-	   			<c:forEach var="code" items="${listeCodesErreur}">
-	   				<li>${LecteurMessage.getMessageErreur(code)}</li>
-	   			</c:forEach>
-	   		</ul>
-	   	</div>
-    </c:if>
+	<jsp:include page="/WEB-INF/Fragments/messages_erreur.jsp"></jsp:include>
     
-    <form method="post" action ="${pageContext.request.contextPath}/vendreUnArticle" class="row justify content mb-2">
+    <form method="post" action ="${pageContext.request.contextPath}/vendreUnArticle" class="row justify content mb-2" enctype="multipart/form-data">
 		<fieldset class="container">
 			<legend>Votre article</legend>
 			
@@ -56,17 +53,16 @@
 			</div>
 			<div class="row">
 				<label for="categorie"  class="col-3 offset-1 col-form-label">Catégorie : </label>
-				<select class=" col-5 form-control" type="text" id="categorie" name="categorie" required>
-					<option value="Toutes">Toutes</option>
-					<option value="Informatique">Informatique</option>
-					<option value="Ameublement">Ameublement</option>
-					<option value="Sport & loisirs">Sport & Loisirs</option>
+				<select class=" col-5 form-control" id="categorie" name="categorie" required>
+					<c:forEach var="categorie" items="${requestScope.listeCategories}">
+						<option value="${categorie.noCategorie}">${categorie.libelle}</option>
+					</c:forEach>
 				</select>
 				
 			</div>
 			<div class="row">
 				<label for="image"  class="col-3 offset-1 col-form-label">Photo de l'article : </label>
-				<input class=" col-5 form-control" type="file" accept="image/png, image/jpeg" id="image" name="image" required/>
+				<input class=" col-5 form-control" type="file" accept="image/png, image/jpeg" id="image" name="image"/>
 				
 			</div>
 			<div class="row">

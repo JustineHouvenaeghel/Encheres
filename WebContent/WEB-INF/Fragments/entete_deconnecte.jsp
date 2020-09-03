@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <header>
-	<nav class="navbar navbar-expand-sm navbar-light fixed-top" role="navigation" style="background-color: #BFAAA5;">
+	<nav class="navbar navbar-expand-sm navbar-light fixed-top" role="navigation" style="background-color: #f9d73c;">
 		<div class="container">
 			<div class="navbar-header">
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse">

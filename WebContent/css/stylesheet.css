@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 .btn {
-	border : 1px solid #BFAAA5;
+	border : 1px solid #f9d73c;
 	margin: 10px;
 	
 }
@@ -14,7 +14,7 @@ span.text {
 }
 
 fieldset {
-	border : 1px solid #BFAAA5;
+	border : 1px solid #f9d73c;
 	-moz-border-radius : 8px;
 	-webkit-border-radius : 8px;
 	border-radius : 8px;
@@ -23,7 +23,7 @@ fieldset {
 
 legend {
 	width : auto;
-	color : #BFAAA5;
+	color : #f9d73c;
 	padding : 1%;
 	font-size: larger;
 }
@@ -33,13 +33,42 @@ label {
 	
 }
 
+div.encadre {
+	border : 1px solid #f9d73c;
+	-moz-border-radius : 8px;
+	-webkit-border-radius : 8px;
+	border-radius : 8px;
+	margin : 5px;
+	margin-right : 4%;
+	margin-left : 4%;
+	display: inline-block;
+	vertical align : top;
+}
+
+div.bordure {
+	border : 1px solid #f9d73c;
+	-moz-border-radius : 8px;
+	-webkit-border-radius : 8px;
+	border-radius : 8px;
+	display: block;
+}
+
+img.image {
+	border : 1px solid #f9d73c;
+	-moz-border-radius : 8px;
+	-webkit-border-radius : 8px;
+	border-radius : 8px;
+	padding : 5px;
+	margin : 5px;
+}
+
 
 footer {
     position: fixed;
     height: 50px;
     bottom: 0;
     width: 100%;
-    background-color: #BFAAA5;
+    background-color: #f9d73c;
 }
 
 p.footertext {

@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.BusinessException;
-import fr.eni.encheres.bll.UtilisateurManager;
+import fr.eni.encheres.bll.CryptageMotDePasse;
+import fr.eni.encheres.bll.UtilisateursManager;
 import fr.eni.encheres.bo.Utilisateur;
 
 /**
@@ -39,15 +40,15 @@ public class ServletSeConnecter extends HttpServlet {
 		String login = request.getParameter("login");
 		String motDePasse = request.getParameter("mot_de_passe");
 		
+		
 		try {
-			UtilisateurManager utilisateurManager = new UtilisateurManager();
+			UtilisateursManager utilisateurManager = new UtilisateursManager();
 			Utilisateur u = utilisateurManager.recupererUtilisateur(login);
 			
 			if(u != null) {
 				this.verifierMotDePasse(u, motDePasse);
 				session.setAttribute("utilisateur", u);
-				RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/Encheres/accueil.jsp");
-				rd.forward(request, response);
+				response.sendRedirect(request.getContextPath() + "/accueil");
 				
 			} 
 			
@@ -55,22 +56,20 @@ public class ServletSeConnecter extends HttpServlet {
 			e.printStackTrace();
 			request.setAttribute("listeCodesErreur",e.getListeCodesErreur());
 			
+			session.setAttribute("utilisateur", null);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/Encheres/Compte/seConnecter.jsp");
 			rd.forward(request, response);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			
 		}
 		
 	}
 	
 	private void verifierMotDePasse(Utilisateur u, String motDePasse) throws BusinessException {
 		BusinessException businessException = new BusinessException();
-//			String motDePasseCrypte = CryptageMotDePasse.encrypt(motDePasse);
-//			System.out.println(motDePasseCrypte);
-//			System.out.println(u.getMotDePasse());
-		if(!u.getMotDePasse().equals(motDePasse)) {
+	
+		if(!CryptageMotDePasse.verifyHash(motDePasse, u.getMotDePasse())) {
 			businessException.ajouterErreur(CodesResultatServlets.MOT_DE_PASSE_INCORRECT);
 			throw businessException;
 			

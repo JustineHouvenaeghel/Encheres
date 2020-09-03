@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.BusinessException;
-import fr.eni.encheres.bll.UtilisateurManager;
+import fr.eni.encheres.bll.UtilisateursManager;
 import fr.eni.encheres.bo.Utilisateur;
 
 /**
@@ -31,14 +31,14 @@ public class ServletSupprimerCompte extends HttpServlet {
 		Utilisateur u  = (Utilisateur) session.getAttribute("utilisateur");
 		
 		try {
-			UtilisateurManager utilisateurManager = new UtilisateurManager();
+			UtilisateursManager utilisateurManager = new UtilisateursManager();
 			utilisateurManager.supprimerUtilisateur(u);
 			
 			session.setAttribute("utilisateur", null);
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/Encheres/accueil.jsp");
-			rd.forward(request, response);
-			
+
+			response.sendRedirect(request.getContextPath() + "/accueil");
+
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			request.setAttribute("listeCodesErreur",e.getListeCodesErreur());

@@ -7,11 +7,11 @@ import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.DAOFactory;
 import fr.eni.encheres.dal.UtilisateurDAO;
 
-public class UtilisateurManager {
+public class UtilisateursManager {
 
 	private UtilisateurDAO utilisateurDAO;
 	
-	public UtilisateurManager() {
+	public UtilisateursManager() {
 		utilisateurDAO = DAOFactory.getUtilisateurDAO();
 	}
 	
@@ -26,7 +26,7 @@ public class UtilisateurManager {
 		} else {
 			Utilisateur utilisateur = new Utilisateur(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse);
 			
-			this.utilisateurDAO.insert(utilisateur);
+			this.utilisateurDAO.insertUtilisateur(utilisateur);
 			
 			return utilisateur;
 		}
@@ -34,42 +34,81 @@ public class UtilisateurManager {
 	}
 	
 	public List<Utilisateur> listerUtilisateurs() throws BusinessException {
-		return this.utilisateurDAO.selectAll();
+		return this.utilisateurDAO.selectAllUtilisateur();
 	}
 	
 	public Utilisateur recupererUtilisateur(String login) throws BusinessException {
-		Utilisateur u = this.utilisateurDAO.selectByEmail(login);
+		Utilisateur utilisateur = null;
 		
-		if(u == null) {
-			u = this.utilisateurDAO.selectByPseudo(login);
+		List<Utilisateur> liste = this.utilisateurDAO.selectAllUtilisateur();
+		if(liste.size() > 0) {
+			for(Utilisateur u : liste) {
+				if(u.getPseudo().toLowerCase().equals(login.toLowerCase()) || u.getEmail().equals(login)) {
+					utilisateur = u;
+					break;
+				}
+			}
 		}
 		
-		if(u == null) {
+		if(utilisateur == null) {
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatBLL.REGLE_LOGIN_INEXISTANT);
 			throw businessException;
 			
 		} else {
-			return u;
+			return utilisateur;
 			
 		}
 		
 	}
 	
-	public void modifierUtilisateur(int id, String pseudo, String nom, String prenom, String email, String telephone,
+	public Utilisateur recupererUtilisateurParId(int id) throws BusinessException {
+		
+		return this.utilisateurDAO.selectById(id);
+	}
+	
+	public Utilisateur modifierUtilisateur(int id, String pseudo, String nom, String prenom, String email, String telephone,
 			String rue, String codePostal, String ville, String motDePasse) throws BusinessException {
 		Utilisateur u = new Utilisateur(id, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse);
 			
-		this.utilisateurDAO.update(u);
+		this.utilisateurDAO.updateUtilisateur(u);
+		
+		return u;
+	}
+	
+	public Utilisateur diminuerCreditUtilisateur(Utilisateur u, int credit) throws BusinessException {
+		
+		if(u.getCredit() < credit) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatBLL.REGLE_CREDIT_INSUFFISANT);
+			throw businessException;
+			
+		} else {
+			int nouveauCredit = u.getCredit() - credit;
+			this.utilisateurDAO.updateCreditUtilisateur(u, nouveauCredit);
+			
+			return this.utilisateurDAO.selectById(u.getId());
+			
+		}
+		
+	}
+	
+	public Utilisateur augmenterCreditUtilisateur(Utilisateur u, int credit) throws BusinessException {
+		
+		int nouveauCredit = u.getCredit() + credit;
+		this.utilisateurDAO.updateCreditUtilisateur(u, nouveauCredit);
+		
+		return this.utilisateurDAO.selectById(u.getId());
+		
 	}
 	
 	public void supprimerUtilisateur(Utilisateur u) throws BusinessException {
-		this.utilisateurDAO.delete(u.getId());
+		this.utilisateurDAO.deleteUtilisateur(u.getId());
 	}
 
 	private void validerUtilisateur(String pseudo, String nom, String prenom, String email, String telephone,
 			String rue, String codePostal, String ville, String motDePasse, BusinessException businessException) {
-		if(pseudo == null || nom == null || prenom == null || email == null || rue == null || codePostal == null || ville == null || motDePasse == null) {
+		if(pseudo == "" || nom == "" || prenom == "" || email == "" || rue == "" || codePostal == "" || ville == "" || motDePasse == "") {
 			businessException.ajouterErreur(CodesResultatBLL.REGLE_CHAMP_VIDE);
 			
 		}
@@ -79,7 +118,7 @@ public class UtilisateurManager {
 		}
 		
 		try {
-			List<Utilisateur> liste = this.utilisateurDAO.selectAll();
+			List<Utilisateur> liste = this.utilisateurDAO.selectAllUtilisateur();
 			for(int i = 0; i < liste.size(); i++) {
 				if(pseudo.toLowerCase().equals(liste.get(i).getPseudo().toLowerCase())) {
 					businessException.ajouterErreur(CodesResultatBLL.REGLE_PSEUDO_INDISPONIBLE);
@@ -104,7 +143,7 @@ public class UtilisateurManager {
 	public void verifierDisponibiliteEmail(String email) throws BusinessException {
 		BusinessException businessException = new BusinessException();
 		try {
-			List<Utilisateur> liste = this.utilisateurDAO.selectAll();
+			List<Utilisateur> liste = this.utilisateurDAO.selectAllUtilisateur();
 			
 			for(int i = 0; i < liste.size(); i++) {
 				if(email.toLowerCase().equals(liste.get(i).getEmail().toLowerCase())) {
@@ -123,7 +162,7 @@ public class UtilisateurManager {
 	public void verifierDisponibilitePseudo(String pseudo) throws BusinessException {
 		BusinessException businessException = new BusinessException();
 		try {
-			List<Utilisateur> liste = this.utilisateurDAO.selectAll();
+			List<Utilisateur> liste = this.utilisateurDAO.selectAllUtilisateur();
 			for(int i = 0; i < liste.size(); i++) {
 				if(pseudo.toLowerCase().equals(liste.get(i).getPseudo().toLowerCase())) {
 					businessException.ajouterErreur(CodesResultatBLL.REGLE_PSEUDO_INDISPONIBLE);

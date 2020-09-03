@@ -19,6 +19,10 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	private static final String UPDATE_UTILISATEUR = "UPDATE UTILISATEURS SET "
 													+ "pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ? "
 													+ "WHERE no_utilisateur = ?;";
+	
+	private static final String UPDATE_CREDIT_UTILISATEUR = "UPDATE UTILISATEURS SET "
+													+ "credit = ? "
+													+ "WHERE no_utilisateur = ?;";
 
 	private static final String DELETE_UTILISATEUR = "DELETE FROM UTILISATEURS WHERE no_utilisateur = ?;";
 
@@ -26,12 +30,8 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 
 	private static final String SELECT_BY_ID = "SELECT * FROM UTILISATEURS WHERE no_utilisateur = ?;";
 
-	private static final String SELECT_BY_PSEUDO = "SELECT * FROM UTILISATEURS WHERE pseudo = ?;";
-	
-	private static final String SELECT_BY_EMAIL = "SELECT * FROM UTILISATEURS WHERE email = ?;";
-	
 	@Override
-	public void insert(Utilisateur utilisateur) throws BusinessException {
+	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException {
 		if(utilisateur == null) {
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_NULL);
@@ -71,7 +71,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	}
 
 	@Override
-	public void delete(int id) throws BusinessException {
+	public void deleteUtilisateur(int id) throws BusinessException {
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(DELETE_UTILISATEUR);
 			pstmt.setInt(1, id);
@@ -88,7 +88,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 	}
 
 	@Override
-	public void update(Utilisateur u) throws BusinessException {
+	public void updateUtilisateur(Utilisateur u) throws BusinessException {
 		if(u == null) {
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.UPDATE_UTILISATEUR_NULL);
@@ -118,9 +118,32 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 		}
 		
 	}
+	
+	@Override
+	public void updateCreditUtilisateur(Utilisateur utilisateur, int credit) throws BusinessException {
+		if(utilisateur == null) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.UPDATE_UTILISATEUR_NULL);
+			throw businessException;
+			
+		}
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(UPDATE_CREDIT_UTILISATEUR);
+			pstmt.setInt(1, credit);
+			pstmt.setInt(2, utilisateur.getId());
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.UPDATE_UTILISATEUR_ECHEC);
+			throw businessException;
+		}
+	}
 
 	@Override
-	public List<Utilisateur> selectAll() throws BusinessException {
+	public List<Utilisateur> selectAllUtilisateur() throws BusinessException {
 		List<Utilisateur> liste = new ArrayList<>();
 		
 		try(Connection cnx = ConnectionProvider.getConnection()) {
@@ -135,7 +158,7 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.LECTURE_LISTES_ECHEC);
+			businessException.ajouterErreur(CodesResultatDAL.LECTURE_LISTES_UTILISATEUR_ECHEC);
 			throw businessException;
 			
 		}
@@ -149,55 +172,6 @@ public class UtilisateurDAOJdbcImpl implements UtilisateurDAO {
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_BY_ID);
 			pstmt.setInt(1, id);
-			
-			ResultSet rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				u = map(rs);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.LECTURE_UTILISATEUR_INEXISTANT);
-			throw businessException;
-			
-		}
-		return u;
-	}
-	
-
-	@Override
-	public Utilisateur selectByPseudo(String pseudo) throws BusinessException {
-		Utilisateur u = null;
-		
-		try(Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement pstmt = cnx.prepareStatement(SELECT_BY_PSEUDO);
-			pstmt.setString(1, pseudo);
-			
-			ResultSet rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				u = map(rs);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.LECTURE_UTILISATEUR_INEXISTANT);
-			throw businessException;
-			
-		}
-		return u;
-	}
-
-	@Override
-	public Utilisateur selectByEmail(String email) throws BusinessException {
-		Utilisateur u = null;
-		
-		try(Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement pstmt = cnx.prepareStatement(SELECT_BY_EMAIL);
-			pstmt.setString(1, email);
 			
 			ResultSet rs = pstmt.executeQuery();
 			

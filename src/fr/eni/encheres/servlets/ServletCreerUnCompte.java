@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.BusinessException;
-import fr.eni.encheres.bll.UtilisateurManager;
+import fr.eni.encheres.bll.CryptageMotDePasse;
+import fr.eni.encheres.bll.UtilisateursManager;
 import fr.eni.encheres.bo.Utilisateur;
 
 /**
@@ -45,17 +46,15 @@ public class ServletCreerUnCompte extends HttpServlet {
 		String ville = request.getParameter("ville");
 		String motDePasse = request.getParameter("mot_de_passe");
 		
-		
 		try {
-//			String motDePasseCrypte = CryptageMotDePasse.encrypt(motDePasse);
+			String motDePasseCrypte = CryptageMotDePasse.hash(motDePasse);
 			
-			UtilisateurManager utilisateurManager = new UtilisateurManager();
+			UtilisateursManager utilisateurManager = new UtilisateursManager();
 			Utilisateur utilisateur;
-			utilisateur = utilisateurManager.creerUtilisateur(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse);
+			utilisateur = utilisateurManager.creerUtilisateur(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasseCrypte);
 			session.setAttribute("utilisateur", utilisateur);
-			
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/Encheres/accueil.jsp");
-			rd.forward(request, response);
+
+			response.sendRedirect(request.getContextPath() + "/accueil");
 			
 		} catch(BusinessException e) {
 			e.printStackTrace();

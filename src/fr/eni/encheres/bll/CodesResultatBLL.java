@@ -29,5 +29,17 @@ public abstract class CodesResultatBLL {
 	 * Echec le nlogin n'existe pas
 	 */
 	public static final int REGLE_LOGIN_INEXISTANT = 20004;
+	
+	/**
+	 * Echec le pseudo n'est pas disponible
+	 */
+	public static final int REGLE_ADRESSE_VIDE = 20005;
+	
+	/**
+	 * Echec le pseudo n'est pas disponible
+	 */
+	public static final int REGLE_CREDIT_INSUFFISANT = 20006;
+	
+	
 
 }

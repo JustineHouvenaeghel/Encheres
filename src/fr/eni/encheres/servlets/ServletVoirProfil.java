@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.encheres.BusinessException;
-import fr.eni.encheres.bll.UtilisateurManager;
+import fr.eni.encheres.bll.UtilisateursManager;
 import fr.eni.encheres.bo.Utilisateur;
 
 /**
@@ -29,17 +29,10 @@ public class ServletVoirProfil extends HttpServlet {
 		String pseudo = request.getParameter("pseudo");
 		
 		try {
-			UtilisateurManager utilisateurManager = new UtilisateurManager();
+			UtilisateursManager utilisateurManager = new UtilisateursManager();
 			Utilisateur u = utilisateurManager.recupererUtilisateur(pseudo);
 			
-			request.setAttribute("pseudo", u.getPseudo());
-			request.setAttribute("nom", u.getNom());
-			request.setAttribute("prenom", u.getPrenom());
-			request.setAttribute("email", u.getEmail());
-			request.setAttribute("telephone", u.getTelephone());
-			request.setAttribute("rue", u.getRue());
-			request.setAttribute("codePostal", u.getCodePostal());
-			request.setAttribute("ville", u.getVille());
+			request.setAttribute("profil", u);
 			
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/Encheres/Compte/voirProfil.jsp");
 			rd.forward(request, response);

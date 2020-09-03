@@ -2,7 +2,6 @@ package fr.eni.encheres.servlets;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,8 +26,8 @@ public class ServletSeDeconnecter extends HttpServlet {
 		session.invalidate();
 		response.setHeader("Cache-Control", "no-cache");
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/Encheres/accueil.jsp");
-		rd.forward(request, response);
+
+		response.sendRedirect(request.getContextPath() + "/accueil");
 		
 	}
 

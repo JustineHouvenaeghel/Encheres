@@ -10,10 +10,16 @@
 <title>Mon profil</title>
 
 	<!-- Bootstrap core CSS -->
-	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- 	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+<!-- 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+<!-- 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> -->
+<!--     <script src="bootstrap/js/bootstrap.min.js"></script> -->
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 	<!-- Custom styles for this template -->
     <link href="css/stylesheet.css" rel="stylesheet">
@@ -26,25 +32,10 @@
 	<jsp:include page="/WEB-INF/Fragments/entete_connecte.jsp"></jsp:include>
 	
 	<div class="row">
-		<h1 class="my-5">Mon profil</h1>
+		<h2 class="my-5 pt-5">Mon profil</h2>
 	</div>
 	
-	<c:if test="${!empty listeCodesErreur}">
-	   	<div class="alert alert-danger" role="alert">
-	   		<strong>Erreur !</strong>
-	   		<ul>
-	   			<c:forEach var="code" items="${listeCodesErreur}">
-	   				<li>${LecteurMessage.getMessageErreur(code)}</li>
-	   			</c:forEach>
-	   		</ul>
-	   	</div>
-    </c:if>
-    
-    <c:if test="${!empty requestScope.modificationEffectuee}">
-	   	<div class="alert alert-success" role="alert">
-	   		<strong>Modifications enregistrées !</strong>
-		</div>
-    </c:if>
+	<jsp:include page="/WEB-INF/Fragments/messages_erreur.jsp"></jsp:include>
 	
 	<form method="post" action ="${pageContext.request.contextPath}/modifierProfil" class="row justify content mb-2">
 		<fieldset class="container">
@@ -111,6 +102,9 @@
 		</div>
 	</form>		
 	
+	
+	<!-- Custom styles for this template -->
+	<script src="js/modifierProfil.js"></script>
 	
 </body>
 </html>
