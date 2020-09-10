@@ -75,13 +75,13 @@ public class ArticlesManager {
 		List<ArticleVendu> liste = this.listerArticles();
 		for(ArticleVendu article : liste) {
 			if(recherche != null && !recherche.equals("")) {
-				if(article.getNomArticle().toLowerCase().contains(recherche.toLowerCase()) | article.getCategorieArticle().getNoCategorie() == noCategorie) {
+				if(article.getEtatVente().equals(EtatVente.EC) && (article.getNomArticle().toLowerCase().contains(recherche.toLowerCase()) | article.getCategorieArticle().getNoCategorie() == noCategorie)) {
 					listeArticles.add(article);
 					
 				}
 				
 			} else {
-				if(article.getCategorieArticle().getNoCategorie() == noCategorie) {
+				if(article.getEtatVente().equals(EtatVente.EC) && article.getCategorieArticle().getNoCategorie() == noCategorie) {
 					listeArticles.add(article);
 					
 				}

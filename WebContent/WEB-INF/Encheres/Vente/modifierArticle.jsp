@@ -37,14 +37,10 @@
 	
 	<jsp:include page="/WEB-INF/Fragments/messages_erreur.jsp"></jsp:include>
     
-    <form method="post" action ="${pageContext.request.contextPath}/modifierArticle" class="row justify content mb-2" enctype="multipart/form-data">
+    <form method="post" action ="${pageContext.request.contextPath}/modifierArticle?no_article=${article.noArticle}" class="row justify content mb-2" enctype="multipart/form-data">
 		<fieldset class="container">
 			<legend>Votre article</legend>
-			<div class="row">
-				<input class=" col-5 form-control" type="text" id="no_article" name="no_article" value="${article.noArticle}" hidden="true"/>
-				
-			</div>
-			
+		
 			<div class="row">
 				<label for="nom_article"  class="col-3 offset-1 col-form-label">Article : </label>
 				<input class=" col-5 form-control" type="text" id="nom_article" name="nom_article" value="${article.nomArticle}"/>

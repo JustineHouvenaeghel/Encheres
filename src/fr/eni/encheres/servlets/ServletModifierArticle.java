@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,9 @@ import fr.eni.encheres.bo.Utilisateur;
 /**
  * Servlet implementation class ServletModifierArticle
  */
+
+@MultipartConfig
+
 @WebServlet("/modifierArticle")
 public class ServletModifierArticle extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -143,7 +147,8 @@ public class ServletModifierArticle extends HttpServlet {
 			
 			ArticleVendu articleModifie = articleManager.modifierArticle(article, nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, miseAPrix, vendeur, categorieArticle, etatVente, lieuRetrait);
 			
-			if(imagePart != null) {
+			if(imagePart.toString().toLowerCase().contains(".jpg") || imagePart.toString().toLowerCase().contains(".png")) {
+				System.out.println(imagePart);
 				String nomImage = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
 				String pathImage = pathImages + "images\\" + article.getNoArticle() + nomImage;
 				File imageFile = new File(pathImage);

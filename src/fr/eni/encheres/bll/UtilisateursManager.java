@@ -24,7 +24,8 @@ public class UtilisateursManager {
 			throw businessException;
 			
 		} else {
-			Utilisateur utilisateur = new Utilisateur(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse);
+			String motDePasseCrypte = CryptageMotDePasse.hash(motDePasse);
+			Utilisateur utilisateur = new Utilisateur(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasseCrypte);
 			
 			this.utilisateurDAO.insertUtilisateur(utilisateur);
 			

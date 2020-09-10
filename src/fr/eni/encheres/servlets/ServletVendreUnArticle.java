@@ -118,8 +118,8 @@ public class ServletVendreUnArticle extends HttpServlet {
 			
 			ArticleVendu article = articleManager.vendreUnArticle(nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, miseAPrix, etatVente, categorieArticle, vendeur);
 			
-			if(imagePart != null) {
-				String nomImage = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
+			String nomImage = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
+			if(!nomImage.equals("")) {	
 				String pathImage = pathImages + "images\\" + article.getNoArticle() + nomImage;
 				File imageFile = new File(pathImage);
 				InputStream input = imagePart.getInputStream();

@@ -15,8 +15,10 @@ import javax.servlet.http.HttpSession;
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bll.ArticlesManager;
 import fr.eni.encheres.bll.CategoriesManager;
+import fr.eni.encheres.bll.EncheresManager;
 import fr.eni.encheres.bo.ArticleVendu;
 import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.EtatVente;
 import fr.eni.encheres.bo.Utilisateur;
 
@@ -40,6 +42,7 @@ public class ServletAccueil extends HttpServlet {
 
 		CategoriesManager categorieManager = new CategoriesManager();
 		ArticlesManager articleManager = new ArticlesManager();
+		EncheresManager enchereManager = new EncheresManager();
 		
 		List<ArticleVendu> listeArticles = new ArrayList<>();
 		
@@ -67,8 +70,45 @@ public class ServletAccueil extends HttpServlet {
 						
 						if(filtreRecherche.toLowerCase().equals("achat")) {
 							if(request.getParameter("encheres_ouvertes") != null) {
-								listeArticles = articleManager.listerArticlesSelonEtat(EtatVente.EC);
-								//TODO
+								liste = articleManager.listerArticlesSelonEtat(EtatVente.EC);
+								for(ArticleVendu a : liste) {
+									if(!listeArticles.contains(a)) {
+										listeArticles.add(a);
+									}
+								}
+							}
+							
+							if(request.getParameter("mes_encheres_en_cours") != null) {
+								List<Integer> listeEncheres = enchereManager.voirEncheresPartUtilisateur(u);
+								if(listeEncheres != null) {
+									List<ArticleVendu> listeArticlesEnCours = new ArrayList<>();
+									for(int i : listeEncheres) {
+										listeArticlesEnCours.add(articleManager.recupererArticle(i));
+									}
+									
+									for(ArticleVendu a : listeArticlesEnCours) {
+										if(!listeArticles.contains(a)) {
+											listeArticles.add(a);
+										}
+									}
+								}
+							}
+							
+							if(request.getParameter("mes_encheres_en_remportees") != null) {
+								List<ArticleVendu> listeArticleVenteTerminee = articleManager.listerArticlesSelonEtat(EtatVente.TE);
+								List<Enchere> listeEncheresGagnees = enchereManager.voirEncheresGagneesParUtilisateur(u, listeArticleVenteTerminee);
+								if(listeEncheresGagnees != null) {
+									List<ArticleVendu> listeArticlesEnTermines = new ArrayList<>();
+									for(Enchere e : listeEncheresGagnees) {
+										listeArticlesEnTermines.add(articleManager.recupererArticle(e.getArticleVendu().getNoArticle()));
+									}
+									
+									for(ArticleVendu a : listeArticlesEnTermines) {
+										if(!listeArticles.contains(a)) {
+											listeArticles.add(a);
+										}
+									}
+								}
 							}
 							
 						} else {
@@ -104,19 +144,12 @@ public class ServletAccueil extends HttpServlet {
 			}
 					
 			if(recherche != null || noCategorie != 0) {
-				if(!recherche.equals("")) {
-					
-							
-					} else {
-						liste = articleManager.recupererArticles(recherche, noCategorie);			
-						for(ArticleVendu a : liste) {
-							if(!listeArticles.contains(a)) {
-								listeArticles.add(a);
-							}
-						}
-						
+				liste = articleManager.recupererArticles(recherche, noCategorie);
+				for(ArticleVendu a : liste) {
+					if(!listeArticles.contains(a)) {
+						listeArticles.add(a);
 					}
-				
+				}
 					
 			} else {
 				liste = articleManager.listerArticlesSelonEtat(EtatVente.EC);

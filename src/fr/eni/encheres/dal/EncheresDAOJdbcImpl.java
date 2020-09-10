@@ -30,6 +30,9 @@ public class EncheresDAOJdbcImpl implements EncheresDAO {
 	private static final String SELECT_MAX_ENCHERE = "SELECT no_enchere, no_utilisateur, no_article, date_enchere, montant_enchere FROM ENCHERES "
 													+ "WHERE montant_enchere = (SELECT MAX(montant_enchere) FROM ENCHERES) AND no_article = ?;";
 	
+	private static final String SELECT_ENCHERES_GAGNEES_PAR_UTILISATEUR = "SELECT no_enchere, no_utilisateur, no_article, date_enchere, montant_enchere FROM ENCHERES "
+													+ "WHERE montant_enchere = (SELECT MAX(montant_enchere) FROM ENCHERES) AND no_article = ? AND no_utilisateur = ?;";
+	
 	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERES (no_utilisateur, no_article, date_enchere, montant_enchere) VALUES (?, ?, ?, ?);";
 
 	@Override
@@ -128,6 +131,32 @@ public class EncheresDAOJdbcImpl implements EncheresDAO {
 			
 		}
 		return enchere;
+	}
+	
+	@Override
+	public Enchere selectEncheresGagnees(Utilisateur acheteur, ArticleVendu article) throws BusinessException {
+		Enchere enchereRemportee = null;
+		
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ENCHERES_GAGNEES_PAR_UTILISATEUR);
+			pstmt.setInt(1, article.getNoArticle());
+			pstmt.setInt(2, acheteur.getId());
+			
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+
+				enchereRemportee = mapEnchere(rs);
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.LECTURE_LISTES_ENCHERE_ECHEC);
+			throw businessException;
+			
+		}
+		return enchereRemportee;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package fr.eni.encheres.servlets;
 
 import java.io.IOException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.BusinessException;
-import fr.eni.encheres.bll.CryptageMotDePasse;
 import fr.eni.encheres.bll.UtilisateursManager;
 import fr.eni.encheres.bo.Utilisateur;
 
@@ -47,11 +47,9 @@ public class ServletCreerUnCompte extends HttpServlet {
 		String motDePasse = request.getParameter("mot_de_passe");
 		
 		try {
-			String motDePasseCrypte = CryptageMotDePasse.hash(motDePasse);
-			
 			UtilisateursManager utilisateurManager = new UtilisateursManager();
 			Utilisateur utilisateur;
-			utilisateur = utilisateurManager.creerUtilisateur(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasseCrypte);
+			utilisateur = utilisateurManager.creerUtilisateur(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse);
 			session.setAttribute("utilisateur", utilisateur);
 
 			response.sendRedirect(request.getContextPath() + "/accueil");

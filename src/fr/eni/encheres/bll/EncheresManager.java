@@ -1,6 +1,7 @@
 package fr.eni.encheres.bll;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.encheres.BusinessException;
@@ -34,6 +35,19 @@ public class EncheresManager {
 	public List<Integer> voirEncheresPartUtilisateur(Utilisateur utilisateur) throws BusinessException {
 		
 		return this.encheresDAO.selectEncheresParUtilisateur(utilisateur.getId());
+	}
+	
+	public List<Enchere> voirEncheresGagneesParUtilisateur(Utilisateur acheteur, List<ArticleVendu> articles) throws BusinessException {
+		List<Enchere> liste = new ArrayList<>();
+		for(ArticleVendu article : articles) {
+			Enchere enchere = this.encheresDAO.selectEncheresGagnees(acheteur, article);
+			if(enchere != null) {
+				liste.add(enchere);
+				
+			}
+		}
+		
+		return liste;
 	}
 
 }
